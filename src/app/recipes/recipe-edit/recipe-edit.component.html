@@ -1,0 +1,25 @@
+<h3 *ngIf="editMode">Edit "{{ recipe.name }}"</h3>
+<h3 *ngIf="!editMode">New Recipe</h3>
+
+<hr />
+
+<div class="form-group">
+  <label for="">Recipe Title</label>
+  <input type="text" class="form-control" [(ngModel)]="recipe.name" />
+</div>
+
+<div class="form-group">
+  <label for="">Recipe Content</label>
+  <textarea
+    name=""
+    id=""
+    rows="10"
+    class="form-control"
+    [(ngModel)]="recipe.description"
+  ></textarea>
+</div>
+
+<div class="form-group">
+  <button class="btn btn-success" (click)="onSaveRecipe()">Save Recipe</button>
+  <button class="btn btn-default" (click)="onCancel()">Cancel</button>
+</div>

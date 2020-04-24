@@ -1,0 +1,35 @@
+body {
+  font-family: 'Helvetica', Arial, sans-serif;
+}
+
+h5 {
+  text-transform: uppercase;
+  font-weight: bold;
+}
+
+.img--thumbnail {
+  width: 50px;
+  height: 50px;
+  object-fit: cover;
+}
+
+.img--article {
+  height: 360px;
+  width: 500px;
+  margin: 1em 0 2em;
+  object-fit: cover;
+}
+
+.cursor {
+  &:hover {
+    cursor: pointer;
+  }
+}
+
+.selected {
+  background-color: blue;
+}
+
+.btn + .btn {
+  margin-left: 5px;
+}
