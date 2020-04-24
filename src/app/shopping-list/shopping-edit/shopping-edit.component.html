@@ -1,5 +1,5 @@
 <div>
-  <div>
+  <form #f="ngForm" (ngSubmit)="onAddItem(f)">
     <div class="row">
       <div class="col-sm-5 form-group">
         <label for="name">Name</label>
@@ -7,7 +7,10 @@
           type="text"
           id="name"
           class="form-control"
-          #nameInput />
+          name="name"
+          ngModel
+          required
+        />
       </div>
       <div class="col-sm-2 form-group">
         <label for="amount">Amount</label>
@@ -15,14 +18,21 @@
           type="number"
           id="amount"
           class="form-control"
-          #amountInput />
+          name="amount"
+          ngModel
+          required
+          pattern="^[1-9]+[0-9]*$"
+        />
+        <!-- min and max parameters DO NOT work here, as you could still input -7 for example and it would submit -->
       </div>
     </div>
 
     <div>
-      <button class="btn btn-success" (click)="onAddItem()">Add</button>
+      <button class="btn btn-success" type="submit" [disabled]="!f.valid">
+        Add
+      </button>
       <button class="btn btn-danger" type="button">Delete</button>
       <button class="btn btn-primary" type="button">Clear</button>
     </div>
-  </div>
+  </form>
 </div>
