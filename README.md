@@ -1,5 +1,4 @@
 # Main app for the Angular9 2020 edition Udemy course
----
 
 # RecipeApp
 
