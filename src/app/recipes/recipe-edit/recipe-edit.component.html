@@ -3,23 +3,61 @@
 
 <hr />
 
-<div class="form-group">
-  <label for="">Recipe Title</label>
-  <input type="text" class="form-control" [(ngModel)]="recipe.name" />
-</div>
+<form [formGroup]="recipeForm" (ngSubmit)="onSubmit()">
+  <!-- Buttons -->
+  <div class="form-group">
+    <button type="submit" class="btn btn-success">Save Recipe</button>
+    <button type="button" class="btn btn-default" (click)="onCancel()">
+      Cancel
+    </button>
+  </div>
 
-<div class="form-group">
-  <label for="">Recipe Content</label>
-  <textarea
-    name=""
-    id=""
-    rows="10"
-    class="form-control"
-    [(ngModel)]="recipe.description"
-  ></textarea>
-</div>
+  <!-- Name -->
+  <div class="form-group">
+    <label for="name">Recipe Name</label>
+    <input type="text" class="form-control" id="name" formControlName="name" />
+  </div>
 
-<div class="form-group">
-  <button class="btn btn-success" (click)="onSaveRecipe()">Save Recipe</button>
-  <button class="btn btn-default" (click)="onCancel()">Cancel</button>
-</div>
+  <!-- Image -->
+  <div>
+    <div class="form-group">
+      <label for="imagePath">Image</label>
+      <input
+        type="text"
+        class="form-control"
+        id="imagePath"
+        formControlName="imagePath"
+      />
+    </div>
+    <div class="form-group">
+      <img src="" alt="" />
+    </div>
+  </div>
+
+  <!-- Description -->
+  <div class="form-group">
+    <label for="description">Recipe Description</label>
+    <textarea
+      id="description"
+      rows="6"
+      class="form-control"
+      formControlName="description"
+    ></textarea>
+  </div>
+
+  <!-- Ingredients -->
+  <div class="form-group">
+    <label for="">Ingredients</label>
+    <div class="row">
+      <div class="col-xs-8">
+        <input type="text" class="form-control" placeholder="ingredient name" />
+      </div>
+      <div class="col-xs-2">
+        <input type="text" class="form-control" placeholder="1" />
+      </div>
+      <div class="col-xs-2">
+        <button class="btn btn-danger">x</button>
+      </div>
+    </div>
+  </div>
+</form>
