@@ -30,7 +30,7 @@
           <a [routerLink]="['edit']">Edit Recipe</a>
         </li>
         <li>
-          <a href="#">Delete Recipe</a>
+          <a (click)="onDeleteRecipe()" class="cursor">Delete Recipe</a>
         </li>
       </ul>
     </div>
