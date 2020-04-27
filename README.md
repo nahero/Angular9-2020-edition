@@ -1,3 +1,5 @@
+# Main app for the Angular9 2020 edition Udemy course
+
 # RecipeApp
 
 This project was generated with [Angular CLI](https://github.com/angular/angular-cli) version 8.3.18.
