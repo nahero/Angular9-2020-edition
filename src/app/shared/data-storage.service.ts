@@ -31,10 +31,8 @@ export class DataStorageService {
   }
 
   fetchDataFromDB() {
-    this.http
-      .get<Recipe[]>('https://recipe-app-eb129.firebaseio.com/recipes.json', {
-        observe: 'body',
-      })
+    return this.http
+      .get<Recipe[]>('https://recipe-app-eb129.firebaseio.com/recipes.json')
       .pipe(
         map((recipes) => {
           return recipes.map((recipe) => {
@@ -44,12 +42,10 @@ export class DataStorageService {
             };
           });
           console.log('Fetch request sent');
+        }),
+        tap((recipes) => {
+          this.recipesService.setRecipes(recipes);
         })
-      )
-      .subscribe((recipes: Recipe[]) => {
-        console.log('Fetch response received');
-        console.log('Events: ', recipes);
-        this.recipesService.setRecipes(recipes);
-      });
+      );
   }
 }
