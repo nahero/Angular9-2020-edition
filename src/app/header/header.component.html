@@ -15,6 +15,12 @@
       </ul>
 
       <ul class="nav navbar-nav navbar-right">
+        <!-- Auth -->
+        <li routerLinkActive="active">
+          <a href [routerLink]="['/auth']">Login</a>
+        </li>
+
+        <!-- Manage data dropdown -->
         <li class="dropdown" appDropdown>
           <a class="dropdown-toggle" role="button">
             Manage <span class="caret"></span>
