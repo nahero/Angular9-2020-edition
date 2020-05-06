@@ -6,7 +6,11 @@
         <hr />
 
         <!-- Form -->
-        <form #authForm="ngForm" (ngSubmit)="onSubmit(authForm)">
+        <form
+          #authForm="ngForm"
+          (ngSubmit)="onSubmit(authForm)"
+          *ngIf="!isLoading"
+        >
           <div class="form-group">
             <label for="email">Email</label>
             <input
@@ -54,6 +58,19 @@
             </button>
           </div>
         </form>
+
+        <!-- Spinner -->
+        <div *ngIf="isLoading" class="spinner__wrap text-center">
+          <app-spinner></app-spinner>
+        </div>
+
+        <!-- Error -->
+        <div *ngIf="error">
+          <hr />
+          <div class="alert alert-danger">
+            <p>{{ error }}</p>
+          </div>
+        </div>
       </div>
     </div>
   </div>
