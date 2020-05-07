@@ -1,6 +1,8 @@
 import { Component, OnInit } from '@angular/core';
 import { NgForm } from '@angular/forms';
-import { AuthService } from './auth-service.service';
+import { AuthService, AuthResponseData } from './auth-service.service';
+import { Observable } from 'rxjs';
+import { Router, ActivatedRoute } from '@angular/router';
 
 @Component({
   selector: 'app-auth',
@@ -8,11 +10,16 @@ import { AuthService } from './auth-service.service';
   styleUrls: ['./auth.component.scss'],
 })
 export class AuthComponent implements OnInit {
+  userAuthenticated = false;
   isLoginMode = true;
   isLoading = false;
   error: string = null;
 
-  constructor(private authService: AuthService) {}
+  constructor(
+    private authService: AuthService,
+    private route: ActivatedRoute,
+    private router: Router
+  ) {}
 
   ngOnInit() {}
 
@@ -25,23 +32,32 @@ export class AuthComponent implements OnInit {
       return;
     }
 
+    const userEmail = form.value.email;
+    const userPassword = form.value.password;
     this.isLoading = true;
+    let authObs: Observable<AuthResponseData>;
+
     if (this.isLoginMode) {
-      // ...
+      authObs = this.authService.login(userEmail, userPassword);
     } else {
-      this.authService.signup(form.value.email, form.value.password).subscribe(
-        (resData) => {
-          this.isLoading = false;
-          console.log('Auth Response received');
-          console.log(resData);
-        },
-        (errorMessage) => {
-          this.isLoading = false;
-          this.error = errorMessage;
-          console.log(errorMessage);
-        }
-      );
-      form.reset();
+      authObs = this.authService.signup(userEmail, userPassword);
     }
+
+    authObs.subscribe(
+      (resData) => {
+        this.isLoading = false;
+        form.reset();
+        this.userAuthenticated = true;
+        this.router.navigateByUrl('recipes');
+
+        console.log('Auth Response received');
+        console.log(resData);
+      },
+      (errorMessage) => {
+        this.isLoading = false;
+        this.error = errorMessage;
+        console.log(errorMessage);
+      }
+    );
   }
 }

@@ -14,10 +14,17 @@
         </li>
       </ul>
 
-      <ul class="nav navbar-nav navbar-right">
+      <ul class="nav navbar-nav navbar-right" *ngIf="!userAuthenticated">
         <!-- Auth -->
         <li routerLinkActive="active">
           <a href [routerLink]="['/auth']">Login</a>
+        </li>
+      </ul>
+
+      <ul class="nav navbar-nav navbar-right" *ngIf="userAuthenticated">
+        <!-- Logout -->
+        <li>
+          <a (click)="onLogout()" class="cursor">Logout</a>
         </li>
 
         <!-- Manage data dropdown -->
