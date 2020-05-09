@@ -3,6 +3,7 @@ import { HttpClient, HttpErrorResponse } from '@angular/common/http';
 import { throwError, Subject, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from './user';
+import { Router } from '@angular/router';
 
 export interface AuthResponseData {
   idToken: string;
@@ -20,7 +21,7 @@ export class AuthService {
   private apiKey = 'AIzaSyBBUw-pog7oJFQqZO7hrN-YwZ32Lc7nlUs';
   user = new BehaviorSubject<User>(null);
 
-  constructor(private http: HttpClient) {}
+  constructor(private http: HttpClient, private route: Router) {}
 
   // SIGNUP
   signup(userEmail: string, userPassword: string) {
@@ -58,6 +59,33 @@ export class AuthService {
       );
   }
 
+  // AUTO LOGIN
+  autoLogin() {
+    const userData = JSON.parse(localStorage.getItem('userData'));
+    if (!userData) {
+      return;
+    } else {
+      const loadedUser = new User(
+        userData.email,
+        userData.id,
+        userData._token,
+        new Date(userData._tokenExpirationDate)
+      );
+      console.log('Loaded user', loadedUser);
+      console.log('User email: ' + loadedUser.email);
+
+      if (loadedUser.token) {
+        this.user.next(loadedUser);
+      }
+    }
+  }
+
+  // LOGOUT
+  logout() {
+    this.user.next(null);
+    this.route.navigateByUrl('auth');
+  }
+
   // HANDLE AUTHENTICATION
   private handleAuthentication(resData) {
     const expirationDate = new Date(
@@ -70,6 +98,7 @@ export class AuthService {
       expirationDate
     );
     this.user.next(user);
+    localStorage.setItem('userData', JSON.stringify(user));
   }
 
   // HANDLE ERROR
