@@ -1,6 +1,6 @@
 import { Injectable } from '@angular/core';
 import { HttpClient, HttpErrorResponse } from '@angular/common/http';
-import { throwError, Subject, BehaviorSubject } from 'rxjs';
+import { throwError, BehaviorSubject } from 'rxjs';
 import { catchError, tap } from 'rxjs/operators';
 import { User } from './user';
 import { Router } from '@angular/router';
@@ -19,7 +19,11 @@ export interface AuthResponseData {
 })
 export class AuthService {
   private apiKey = 'AIzaSyBBUw-pog7oJFQqZO7hrN-YwZ32Lc7nlUs';
+  // BehaviorSubject always gives access to the previous value,
+  // so we can access user even if we missed the last subject update (next)
+  // also we can take(1) and not worry about unsubscribing as it does it for us after (1)
   user = new BehaviorSubject<User>(null);
+  private tokenExpirationTimer: any;
 
   constructor(private http: HttpClient, private route: Router) {}
 
@@ -73,9 +77,22 @@ export class AuthService {
       );
       console.log('Loaded user', loadedUser);
       console.log('User email: ' + loadedUser.email);
+      console.log(
+        'Expiration date: ' + new Date(userData._tokenExpirationDate)
+      );
+      console.log('Current date: ' + new Date());
 
       if (loadedUser.token) {
         this.user.next(loadedUser);
+        // Get the difference between tokenExpirationDate and currentDate in miliseconds
+        const expirationDate = new Date(
+          userData._tokenExpirationDate
+        ).getTime();
+        const currentDate = new Date().getTime();
+        const milisecondsRemaining = expirationDate - currentDate;
+        console.log('Miliseconds remaining: ' + milisecondsRemaining);
+
+        this.autoLogout(milisecondsRemaining);
       }
     }
   }
@@ -83,7 +100,21 @@ export class AuthService {
   // LOGOUT
   logout() {
     this.user.next(null);
+    localStorage.removeItem('userData');
+    if (this.tokenExpirationTimer) {
+      clearTimeout(this.tokenExpirationTimer);
+    }
+    this.tokenExpirationTimer = null;
     this.route.navigateByUrl('auth');
+  }
+
+  // AUTO LOGOUT on token expire
+  autoLogout(expirationTime: number) {
+    this.tokenExpirationTimer = setTimeout(() => {
+      this.logout();
+      alert('Your session expired. Please login again.');
+      console.log('User Token expired');
+    }, expirationTime);
   }
 
   // HANDLE AUTHENTICATION
@@ -99,6 +130,9 @@ export class AuthService {
     );
     this.user.next(user);
     localStorage.setItem('userData', JSON.stringify(user));
+    this.autoLogout(resData.expiresIn * 1000);
+
+    console.log('token expires in: ' + resData.expiresIn + 'seconds');
   }
 
   // HANDLE ERROR
