@@ -1,0 +1,21 @@
+.backdrop {
+  position: fixed;
+  top: 0;
+  left: 0;
+  height: 100vh;
+  width: 100vw;
+  background: rgba(0, 0, 0, 0.2);
+  z-index: 50;
+}
+
+.alert__wrap {
+  position: fixed;
+  top: 15vh;
+  left: 25vw;
+  width: 50vw;
+  background: #fff;
+  border-top: 4px solid hsl(0, 90, 65);
+  padding: 30px;
+  z-index: 51;
+  box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+}

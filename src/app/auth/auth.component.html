@@ -65,12 +65,17 @@
         </div>
 
         <!-- Error -->
-        <div *ngIf="error">
+        <app-alert
+          [errorMessage]="error"
+          *ngIf="error"
+          (closeError)="onHandleError()"
+        ></app-alert>
+        <!-- <div *ngIf="error">
           <hr />
           <div class="alert alert-danger">
             <p>{{ error }}</p>
           </div>
-        </div>
+        </div> -->
       </div>
     </div>
   </div>
